@@ -88,6 +88,7 @@ The first request may take a few seconds because the backend downloads the FRED 
 - `GET /api/data?refresh=true`: re-downloads FRED data before returning the dataset.
 - `GET /api/forecast`: trains a simple regression model and predicts the next-period Case-Shiller home price index change.
 - `GET /api/insights`: returns rule-based analyst commentary based on recent trends.
+- `POST /api/model/train`: trains a user-configured scikit-learn model from the Model Hub.
 
 ## Notes for Learning
 

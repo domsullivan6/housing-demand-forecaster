@@ -73,9 +73,47 @@ button:hover {
   background: var(--accent-dark);
 }
 
+select,
+input[type="number"] {
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0 10px;
+  background: white;
+  color: var(--ink);
+  font: inherit;
+}
+
 main {
   width: min(1180px, calc(100% - 40px));
   margin: 24px auto 56px;
+}
+
+.tab-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.tab-button {
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--muted);
+}
+
+.tab-button.active,
+.tab-button:hover {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: white;
+}
+
+.tab-view {
+  display: none;
+}
+
+.tab-view.active {
+  display: block;
 }
 
 .status-row {
@@ -211,6 +249,10 @@ main {
   gap: 16px;
 }
 
+.panel-header.compact {
+  margin-bottom: 10px;
+}
+
 .panel-header p {
   color: var(--muted);
   font-size: 0.9rem;
@@ -292,6 +334,174 @@ main {
   line-height: 1.45;
 }
 
+.model-hub-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.8fr) minmax(0, 1.4fr);
+  gap: 18px;
+}
+
+.model-builder-panel,
+.model-report-panel {
+  align-self: start;
+}
+
+.control-group,
+.lag-builder {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.control-group label,
+.lag-controls label {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.feature-picker {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.feature-picker legend {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 800;
+  padding: 0 6px;
+}
+
+.feature-picker label {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  line-height: 1.3;
+}
+
+.lag-controls {
+  align-items: end;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px auto;
+  gap: 10px;
+}
+
+.lag-controls label {
+  display: grid;
+  gap: 6px;
+}
+
+.secondary-button {
+  border: 1px solid var(--accent);
+  background: white;
+  color: var(--accent-dark);
+}
+
+.secondary-button:hover {
+  background: #eef5f2;
+  color: var(--accent-dark);
+}
+
+.train-button {
+  width: 100%;
+}
+
+.lag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 32px;
+}
+
+.lag-chip {
+  align-items: center;
+  display: inline-flex;
+  gap: 8px;
+  border: 1px solid #c9dad4;
+  border-radius: 999px;
+  padding: 6px 8px 6px 10px;
+  background: #eef5f2;
+  color: var(--accent-dark);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.lag-chip button {
+  min-height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  padding: 0;
+  background: var(--accent-dark);
+}
+
+.model-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 10px 0 18px;
+}
+
+.model-metric {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfcfa;
+}
+
+.model-metric span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.model-metric strong {
+  font-size: 1.25rem;
+}
+
+.model-report-grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.75fr) minmax(0, 1.25fr);
+  gap: 18px;
+}
+
+.model-report-grid h3 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+
+.explanation-table {
+  display: grid;
+  gap: 8px;
+}
+
+.explanation-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.explanation-row strong {
+  color: var(--ink);
+}
+
+.prediction-chart-frame {
+  height: 360px;
+  position: relative;
+}
+
+#predictionChart {
+  height: 100%;
+  width: 100%;
+}
+
 @media (max-width: 860px) {
   .app-header,
   .panel-header {
@@ -301,7 +511,17 @@ main {
 
   .metric-grid,
   .dashboard-grid,
-  .insights-list {
+  .insights-list,
+  .model-hub-grid,
+  .model-report-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .model-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .lag-controls {
     grid-template-columns: 1fr;
   }
 
@@ -310,6 +530,10 @@ main {
   }
 
   .chart-frame {
+    height: 300px;
+  }
+
+  .prediction-chart-frame {
     height: 300px;
   }
 }

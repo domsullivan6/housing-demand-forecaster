@@ -17,83 +17,176 @@
     </header>
 
     <main>
+      <nav class="tab-bar" aria-label="Application views">
+        <button class="tab-button active" type="button" data-tab-target="dashboardView">Dashboard</button>
+        <button class="tab-button" type="button" data-tab-target="modelHubView">Model Hub</button>
+      </nav>
+
       <section class="status-row" id="status">Loading public FRED data...</section>
 
-      <section class="metric-grid" aria-label="Latest housing market values">
-        <article class="metric-card">
-          <div class="metric-label">
-            <span>Housing Starts</span>
-            <span
-              class="info-icon"
-              tabindex="0"
-              aria-label="Housing starts definition"
-              data-tooltip="Privately owned new housing units started, reported at a seasonally adjusted annual rate."
-            >i</span>
-          </div>
-          <strong id="housingStarts">--</strong>
-        </article>
-        <article class="metric-card">
-          <div class="metric-label">
-            <span>Building Permits</span>
-            <span
-              class="info-icon"
-              tabindex="0"
-              aria-label="Building permits definition"
-              data-tooltip="New privately owned housing units authorized by building permits, reported at a seasonally adjusted annual rate."
-            >i</span>
-          </div>
-          <strong id="buildingPermits">--</strong>
-        </article>
-        <article class="metric-card">
-          <div class="metric-label">
-            <span>30-Year Mortgage</span>
-            <span
-              class="info-icon"
-              tabindex="0"
-              aria-label="30-year mortgage rate definition"
-              data-tooltip="Average contract interest rate for a 30-year fixed-rate mortgage in the United States."
-            >i</span>
-          </div>
-          <strong id="mortgageRate">--</strong>
-        </article>
-        <article class="metric-card">
-          <div class="metric-label">
-            <span>Home Price Index</span>
-            <span
-              class="info-icon"
-              tabindex="0"
-              aria-label="Home price index definition"
-              data-tooltip="S&P CoreLogic Case-Shiller U.S. National Home Price Index, tracking changes in single-family home prices."
-            >i</span>
-          </div>
-          <strong id="homePriceIndex">--</strong>
-        </article>
-      </section>
+      <section id="dashboardView" class="tab-view active">
+        <section class="metric-grid" aria-label="Latest housing market values">
+          <article class="metric-card">
+            <div class="metric-label">
+              <span>Housing Starts</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                aria-label="Housing starts definition"
+                data-tooltip="Privately owned new housing units started, reported at a seasonally adjusted annual rate."
+              >i</span>
+            </div>
+            <strong id="housingStarts">--</strong>
+          </article>
+          <article class="metric-card">
+            <div class="metric-label">
+              <span>Building Permits</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                aria-label="Building permits definition"
+                data-tooltip="New privately owned housing units authorized by building permits, reported at a seasonally adjusted annual rate."
+              >i</span>
+            </div>
+            <strong id="buildingPermits">--</strong>
+          </article>
+          <article class="metric-card">
+            <div class="metric-label">
+              <span>30-Year Mortgage</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                aria-label="30-year mortgage rate definition"
+                data-tooltip="Average contract interest rate for a 30-year fixed-rate mortgage in the United States."
+              >i</span>
+            </div>
+            <strong id="mortgageRate">--</strong>
+          </article>
+          <article class="metric-card">
+            <div class="metric-label">
+              <span>Home Price Index</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                aria-label="Home price index definition"
+                data-tooltip="S&P CoreLogic Case-Shiller U.S. National Home Price Index, tracking changes in single-family home prices."
+              >i</span>
+            </div>
+            <strong id="homePriceIndex">--</strong>
+          </article>
+        </section>
 
-      <section class="dashboard-grid">
-        <div class="panel chart-panel">
+        <section class="dashboard-grid">
+          <div class="panel chart-panel">
+            <div class="panel-header">
+              <h2>Monthly Trends</h2>
+              <p id="latestDate"></p>
+            </div>
+            <div class="chart-frame">
+              <canvas id="housingChart"></canvas>
+            </div>
+          </div>
+
+          <aside class="panel forecast-panel">
+            <h2>Model Forecast</h2>
+            <div id="forecastOutput" class="forecast-output">Training model...</div>
+            <div id="featureImportance" class="feature-list"></div>
+          </aside>
+        </section>
+
+        <section class="panel">
           <div class="panel-header">
-            <h2>Monthly Trends</h2>
-            <p id="latestDate"></p>
+            <h2>Analyst Insights</h2>
+            <p>Rule-based commentary from the latest data.</p>
           </div>
-          <div class="chart-frame">
-            <canvas id="housingChart"></canvas>
-          </div>
-        </div>
-
-        <aside class="panel forecast-panel">
-          <h2>Model Forecast</h2>
-          <div id="forecastOutput" class="forecast-output">Training model...</div>
-          <div id="featureImportance" class="feature-list"></div>
-        </aside>
+          <div id="insightsList" class="insights-list"></div>
+        </section>
       </section>
 
-      <section class="panel">
-        <div class="panel-header">
-          <h2>Analyst Insights</h2>
-          <p>Rule-based commentary from the latest data.</p>
-        </div>
-        <div id="insightsList" class="insights-list"></div>
+      <section id="modelHubView" class="tab-view">
+        <section class="model-hub-grid">
+          <div class="panel model-builder-panel">
+            <div class="panel-header">
+              <div>
+                <h2>Model Builder</h2>
+                <p>Predict next-period Case-Shiller monthly percent change.</p>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="algorithmSelect">Algorithm</label>
+              <select id="algorithmSelect">
+                <option value="linear_regression">Linear Regression</option>
+                <option value="gbm">GBM</option>
+                <option value="random_forest">Random Forest</option>
+              </select>
+            </div>
+
+            <fieldset class="feature-picker">
+              <legend>Base Features</legend>
+              <label><input type="checkbox" name="modelFeature" value="housing_starts" checked /> Housing starts</label>
+              <label><input type="checkbox" name="modelFeature" value="building_permits" checked /> Building permits</label>
+              <label><input type="checkbox" name="modelFeature" value="mortgage_rate" checked /> Mortgage rate</label>
+              <label><input type="checkbox" name="modelFeature" value="home_price_change" checked /> Prior home price change</label>
+              <label><input type="checkbox" name="modelFeature" value="housing_starts_change" /> Housing starts change</label>
+              <label><input type="checkbox" name="modelFeature" value="building_permits_change" /> Building permits change</label>
+              <label><input type="checkbox" name="modelFeature" value="mortgage_rate_change" /> Mortgage rate change</label>
+            </fieldset>
+
+            <div class="lag-builder">
+              <div class="panel-header compact">
+                <div>
+                  <h2>Lag Features</h2>
+                  <p>Add month-lagged predictors such as mortgage rate lag 3.</p>
+                </div>
+              </div>
+
+              <div class="lag-controls">
+                <label>
+                  Source
+                  <select id="lagSourceSelect">
+                    <option value="housing_starts">Housing starts</option>
+                    <option value="building_permits">Building permits</option>
+                    <option value="mortgage_rate">Mortgage rate</option>
+                    <option value="home_price_change">Home price change</option>
+                    <option value="housing_starts_change">Housing starts change</option>
+                    <option value="building_permits_change">Building permits change</option>
+                    <option value="mortgage_rate_change">Mortgage rate change</option>
+                  </select>
+                </label>
+                <label>
+                  Lag Months
+                  <input id="lagMonthsInput" type="number" min="1" max="24" value="1" />
+                </label>
+                <button id="addLagButton" type="button" class="secondary-button">Add Lag</button>
+              </div>
+
+              <div id="lagList" class="lag-list" aria-live="polite"></div>
+            </div>
+
+            <button id="trainModelButton" type="button" class="train-button">Train Model</button>
+          </div>
+
+          <div class="panel model-report-panel">
+            <div class="panel-header">
+              <div>
+                <h2>Model Report</h2>
+                <p id="modelReportStatus">Choose features, add lags if useful, then train a model.</p>
+              </div>
+            </div>
+
+            <div id="modelMetrics" class="model-metrics"></div>
+            <div class="model-report-grid">
+              <div>
+                <h3 id="explanationTitle">Coefficients / Importances</h3>
+                <div id="modelExplanation" class="explanation-table"></div>
+              </div>
+              <div class="prediction-chart-frame">
+                <canvas id="predictionChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
       </section>
     </main>
 

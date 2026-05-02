@@ -4,20 +4,36 @@ from pathlib import Path
 from typing import Optional
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, Field
 
 from backend.data_processing import build_monthly_dataset, records_for_api
 from backend.insights import generate_insights
-from backend.modeling import train_forecast_model
+from backend.modeling import train_custom_model, train_forecast_model
 
 
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = BASE_DIR / "frontend"
+
+
+class LagFeatureRequest(BaseModel):
+    """User-selected source column and month lag for the model hub."""
+
+    source: str
+    lag: int = Field(ge=1, le=24)
+
+
+class ModelTrainingRequest(BaseModel):
+    """Payload for the interactive model hub training endpoint."""
+
+    features: list[str] = Field(default_factory=list)
+    lag_features: list[LagFeatureRequest] = Field(default_factory=list)
+    algorithm: str
 
 app = FastAPI(
     title="Housing Demand Forecaster",
@@ -86,3 +102,19 @@ def get_insights(refresh: bool = Query(default=False)) -> dict:
         "latest_date": dataset["date"].iloc[-1].strftime("%Y-%m-%d"),
         "insights": generate_insights(dataset),
     }
+
+
+@app.post("/api/model/train")
+def train_model(request: ModelTrainingRequest) -> dict:
+    """Train a user-configured model for the machine learning hub."""
+    dataset = build_monthly_dataset()
+
+    try:
+        return train_custom_model(
+            dataset=dataset,
+            features=request.features,
+            lag_features=[lag.model_dump() for lag in request.lag_features],
+            algorithm=request.algorithm,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
