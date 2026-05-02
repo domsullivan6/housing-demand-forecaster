@@ -1,0 +1,227 @@
+:root {
+  --bg: #f6f7f2;
+  --ink: #172126;
+  --muted: #667075;
+  --panel: #ffffff;
+  --line: #d9ded8;
+  --accent: #0f766e;
+  --accent-dark: #134e4a;
+  --warning: #9a5b13;
+  --good: #256f3a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 32px clamp(20px, 5vw, 64px) 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--accent-dark);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1;
+}
+
+h2 {
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+
+button {
+  min-height: 42px;
+  border: 0;
+  border-radius: 6px;
+  padding: 0 16px;
+  background: var(--accent);
+  color: white;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--accent-dark);
+}
+
+main {
+  width: min(1180px, calc(100% - 40px));
+  margin: 24px auto 56px;
+}
+
+.status-row {
+  min-height: 24px;
+  margin-bottom: 18px;
+  color: var(--muted);
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.metric-card,
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 14px 30px rgba(23, 33, 38, 0.06);
+}
+
+.metric-card {
+  display: grid;
+  gap: 8px;
+  min-height: 112px;
+  padding: 18px;
+}
+
+.metric-card span {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.metric-card strong {
+  font-size: 1.55rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 0.9fr);
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.panel {
+  padding: 20px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.panel-header p {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.chart-panel {
+  min-height: 480px;
+}
+
+#housingChart {
+  width: 100%;
+  min-height: 390px;
+}
+
+.forecast-output {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 22px;
+}
+
+.forecast-number {
+  font-size: 2.25rem;
+  font-weight: 800;
+}
+
+.forecast-meta,
+.feature-list,
+.insight-card p {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.feature-list {
+  display: grid;
+  gap: 8px;
+}
+
+.feature-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+
+.insights-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.insight-card {
+  border-left: 4px solid var(--accent);
+  padding: 14px 14px 14px 16px;
+  background: #fbfcfa;
+}
+
+.insight-card.cautious {
+  border-left-color: var(--warning);
+}
+
+.insight-card.positive {
+  border-left-color: var(--good);
+}
+
+.insight-card h3 {
+  margin: 0 0 8px;
+  font-size: 0.98rem;
+}
+
+.insight-card p {
+  margin-bottom: 0;
+  line-height: 1.45;
+}
+
+@media (max-width: 860px) {
+  .app-header,
+  .panel-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .metric-grid,
+  .dashboard-grid,
+  .insights-list {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-panel {
+    min-height: 420px;
+  }
+}

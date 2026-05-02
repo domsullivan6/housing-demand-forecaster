@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Housing Demand Forecaster</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Local housing market dashboard</p>
+        <h1>Housing Demand Forecaster</h1>
+      </div>
+      <button id="refreshButton" type="button">Refresh Data</button>
+    </header>
+
+    <main>
+      <section class="status-row" id="status">Loading public FRED data...</section>
+
+      <section class="metric-grid" aria-label="Latest housing market values">
+        <article class="metric-card">
+          <span>Housing Starts</span>
+          <strong id="housingStarts">--</strong>
+        </article>
+        <article class="metric-card">
+          <span>Building Permits</span>
+          <strong id="buildingPermits">--</strong>
+        </article>
+        <article class="metric-card">
+          <span>30-Year Mortgage</span>
+          <strong id="mortgageRate">--</strong>
+        </article>
+        <article class="metric-card">
+          <span>Home Price Index</span>
+          <strong id="homePriceIndex">--</strong>
+        </article>
+      </section>
+
+      <section class="dashboard-grid">
+        <div class="panel chart-panel">
+          <div class="panel-header">
+            <h2>Monthly Trends</h2>
+            <p id="latestDate"></p>
+          </div>
+          <canvas id="housingChart"></canvas>
+        </div>
+
+        <aside class="panel forecast-panel">
+          <h2>Model Forecast</h2>
+          <div id="forecastOutput" class="forecast-output">Training model...</div>
+          <div id="featureImportance" class="feature-list"></div>
+        </aside>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Analyst Insights</h2>
+          <p>Rule-based commentary from the latest data.</p>
+        </div>
+        <div id="insightsList" class="insights-list"></div>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
