@@ -34,8 +34,8 @@ function updateLatestValues(latest) {
 }
 
 function drawChart(records) {
-  // Limit the first dashboard view to recent history so the lines stay readable.
-  const recentRecords = records.slice(-120);
+  // The API already sends a recent window, keeping the first render quick.
+  const recentRecords = records;
   const labels = recentRecords.map((row) => row.date.slice(0, 7));
   const chartData = {
     labels,
@@ -47,6 +47,7 @@ function drawChart(records) {
         backgroundColor: "#0f766e",
         yAxisID: "rateAxis",
         tension: 0.25,
+        pointRadius: 0,
       },
       {
         label: "Housing Starts",
@@ -55,6 +56,7 @@ function drawChart(records) {
         backgroundColor: "#2563eb",
         yAxisID: "volumeAxis",
         tension: 0.25,
+        pointRadius: 0,
       },
       {
         label: "Building Permits",
@@ -63,6 +65,7 @@ function drawChart(records) {
         backgroundColor: "#b45309",
         yAxisID: "volumeAxis",
         tension: 0.25,
+        pointRadius: 0,
       },
       {
         label: "Home Price Index",
@@ -71,6 +74,7 @@ function drawChart(records) {
         backgroundColor: "#7c3aed",
         yAxisID: "priceAxis",
         tension: 0.25,
+        pointRadius: 0,
       },
     ],
   };
@@ -78,6 +82,7 @@ function drawChart(records) {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false,
     interaction: {
       mode: "index",
       intersect: false,
@@ -163,21 +168,25 @@ function updateInsights(insights) {
 }
 
 async function loadDashboard(refresh = false) {
-  const suffix = refresh ? "?refresh=true" : "";
+  const params = new URLSearchParams({ months: "84" });
+  if (refresh) {
+    params.set("refresh", "true");
+  }
+  const suffix = `?${params.toString()}`;
   setStatus(refresh ? "Refreshing FRED data..." : "Loading public FRED data...");
 
   try {
-    const [data, forecast, insightResponse] = await Promise.all([
-      fetchJson(`/api/data${suffix}`),
-      fetchJson(`/api/forecast${suffix}`),
-      fetchJson(`/api/insights${suffix}`),
+    const data = await fetchJson(`/api/data${suffix}`);
+    const [forecast, insightResponse] = await Promise.all([
+      fetchJson("/api/forecast"),
+      fetchJson("/api/insights"),
     ]);
 
     updateLatestValues(data.latest);
     drawChart(data.series);
     updateForecast(forecast);
     updateInsights(insightResponse.insights);
-    setStatus(`${data.row_count} monthly observations loaded.`);
+    setStatus(`${data.returned_rows} recent months shown from ${data.row_count} monthly observations.`);
   } catch (error) {
     console.error(error);
     setStatus("Could not load the dashboard. Check that the FastAPI server is running and has internet access for the first data download.");

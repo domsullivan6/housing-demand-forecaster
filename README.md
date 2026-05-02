@@ -84,6 +84,7 @@ The first request may take a few seconds because the backend downloads the FRED 
 ## API Endpoints
 
 - `GET /api/data`: returns the joined monthly dataset.
+- `GET /api/data?months=84`: returns only the latest 84 rows for a faster dashboard chart.
 - `GET /api/data?refresh=true`: re-downloads FRED data before returning the dataset.
 - `GET /api/forecast`: trains a simple regression model and predicts the next-period Case-Shiller home price index change.
 - `GET /api/insights`: returns rule-based analyst commentary based on recent trends.

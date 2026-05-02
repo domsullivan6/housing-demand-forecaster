@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from functools import reduce
+from typing import Optional
 
 import pandas as pd
 
@@ -55,8 +56,10 @@ def build_monthly_dataset(refresh: bool = False) -> pd.DataFrame:
     return dataset
 
 
-def records_for_api(dataset: pd.DataFrame) -> list[dict]:
+def records_for_api(dataset: pd.DataFrame, months: Optional[int] = None) -> list[dict]:
     """Convert the monthly dataset into JSON-friendly records."""
     api_frame = dataset.copy()
+    if months:
+        api_frame = api_frame.tail(months)
     api_frame["date"] = api_frame["date"].dt.strftime("%Y-%m-%d")
     return api_frame.round(4).to_dict(orient="records")

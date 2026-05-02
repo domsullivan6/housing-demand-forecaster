@@ -1,6 +1,7 @@
 """FastAPI entry point for the Housing Demand Forecaster backend."""
 
 from pathlib import Path
+from typing import Optional
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, Query
@@ -55,14 +56,18 @@ def dashboard() -> FileResponse:
 
 
 @app.get("/api/data")
-def get_data(refresh: bool = Query(default=False)) -> dict:
+def get_data(
+    refresh: bool = Query(default=False),
+    months: Optional[int] = Query(default=None, ge=12, le=600),
+) -> dict:
     """Return the joined monthly housing dataset."""
     dataset = build_monthly_dataset(refresh=refresh)
 
     return {
-        "series": records_for_api(dataset),
+        "series": records_for_api(dataset, months=months),
         "latest": _json_ready_latest(dataset.iloc[-1]),
         "row_count": len(dataset),
+        "returned_rows": len(dataset.tail(months)) if months else len(dataset),
     }
 
 

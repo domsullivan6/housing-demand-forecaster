@@ -139,12 +139,18 @@ main {
 }
 
 .chart-panel {
-  min-height: 480px;
+  min-height: 0;
+}
+
+.chart-frame {
+  height: 340px;
+  position: relative;
+  width: 100%;
 }
 
 #housingChart {
+  height: 100%;
   width: 100%;
-  min-height: 390px;
 }
 
 .forecast-output {
@@ -222,6 +228,10 @@ main {
   }
 
   .chart-panel {
-    min-height: 420px;
+    min-height: 0;
+  }
+
+  .chart-frame {
+    height: 300px;
   }
 }
