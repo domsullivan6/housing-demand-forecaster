@@ -73,9 +73,47 @@ button:hover {
   background: var(--accent-dark);
 }
 
+select,
+input[type="number"] {
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0 10px;
+  background: white;
+  color: var(--ink);
+  font: inherit;
+}
+
 main {
   width: min(1180px, calc(100% - 40px));
   margin: 24px auto 56px;
+}
+
+.tab-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.tab-button {
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--muted);
+}
+
+.tab-button.active,
+.tab-button:hover {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: white;
+}
+
+.tab-view {
+  display: none;
+}
+
+.tab-view.active {
+  display: block;
 }
 
 .status-row {
@@ -106,9 +144,87 @@ main {
   padding: 18px;
 }
 
-.metric-card span {
+.metric-label {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.metric-label span:first-child {
   color: var(--muted);
   font-size: 0.86rem;
+}
+
+.info-icon {
+  align-items: center;
+  background: #eef5f2;
+  border: 1px solid #c9dad4;
+  border-radius: 50%;
+  color: var(--accent-dark);
+  cursor: help;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 800;
+  height: 20px;
+  justify-content: center;
+  line-height: 1;
+  position: relative;
+  width: 20px;
+}
+
+.info-icon::after {
+  background: var(--ink);
+  border-radius: 6px;
+  bottom: calc(100% + 10px);
+  color: white;
+  content: attr(data-tooltip);
+  font-size: 0.78rem;
+  font-weight: 600;
+  left: 50%;
+  line-height: 1.35;
+  max-width: min(260px, calc(100vw - 48px));
+  opacity: 0;
+  padding: 10px 12px;
+  pointer-events: none;
+  position: absolute;
+  transform: translateX(-50%) translateY(4px);
+  transition: opacity 120ms ease, transform 120ms ease;
+  visibility: hidden;
+  width: 240px;
+  z-index: 5;
+}
+
+.info-icon::before {
+  border: 6px solid transparent;
+  border-top-color: var(--ink);
+  bottom: calc(100% - 2px);
+  content: "";
+  left: 50%;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  transform: translateX(-50%) translateY(4px);
+  transition: opacity 120ms ease, transform 120ms ease;
+  visibility: hidden;
+  z-index: 6;
+}
+
+.info-icon:hover::after,
+.info-icon:hover::before,
+.info-icon:focus::after,
+.info-icon:focus::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  visibility: visible;
+}
+
+.info-icon:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .metric-card strong {
@@ -133,18 +249,28 @@ main {
   gap: 16px;
 }
 
+.panel-header.compact {
+  margin-bottom: 10px;
+}
+
 .panel-header p {
   color: var(--muted);
   font-size: 0.9rem;
 }
 
 .chart-panel {
-  min-height: 480px;
+  min-height: 0;
+}
+
+.chart-frame {
+  height: 340px;
+  position: relative;
+  width: 100%;
 }
 
 #housingChart {
+  height: 100%;
   width: 100%;
-  min-height: 390px;
 }
 
 .forecast-output {
@@ -208,6 +334,174 @@ main {
   line-height: 1.45;
 }
 
+.model-hub-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.8fr) minmax(0, 1.4fr);
+  gap: 18px;
+}
+
+.model-builder-panel,
+.model-report-panel {
+  align-self: start;
+}
+
+.control-group,
+.lag-builder {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.control-group label,
+.lag-controls label {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.feature-picker {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.feature-picker legend {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 800;
+  padding: 0 6px;
+}
+
+.feature-picker label {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  line-height: 1.3;
+}
+
+.lag-controls {
+  align-items: end;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px auto;
+  gap: 10px;
+}
+
+.lag-controls label {
+  display: grid;
+  gap: 6px;
+}
+
+.secondary-button {
+  border: 1px solid var(--accent);
+  background: white;
+  color: var(--accent-dark);
+}
+
+.secondary-button:hover {
+  background: #eef5f2;
+  color: var(--accent-dark);
+}
+
+.train-button {
+  width: 100%;
+}
+
+.lag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 32px;
+}
+
+.lag-chip {
+  align-items: center;
+  display: inline-flex;
+  gap: 8px;
+  border: 1px solid #c9dad4;
+  border-radius: 999px;
+  padding: 6px 8px 6px 10px;
+  background: #eef5f2;
+  color: var(--accent-dark);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.lag-chip button {
+  min-height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  padding: 0;
+  background: var(--accent-dark);
+}
+
+.model-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 10px 0 18px;
+}
+
+.model-metric {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfcfa;
+}
+
+.model-metric span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.model-metric strong {
+  font-size: 1.25rem;
+}
+
+.model-report-grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.75fr) minmax(0, 1.25fr);
+  gap: 18px;
+}
+
+.model-report-grid h3 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+
+.explanation-table {
+  display: grid;
+  gap: 8px;
+}
+
+.explanation-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.explanation-row strong {
+  color: var(--ink);
+}
+
+.prediction-chart-frame {
+  height: 360px;
+  position: relative;
+}
+
+#predictionChart {
+  height: 100%;
+  width: 100%;
+}
+
 @media (max-width: 860px) {
   .app-header,
   .panel-header {
@@ -217,11 +511,29 @@ main {
 
   .metric-grid,
   .dashboard-grid,
-  .insights-list {
+  .insights-list,
+  .model-hub-grid,
+  .model-report-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .model-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .lag-controls {
     grid-template-columns: 1fr;
   }
 
   .chart-panel {
-    min-height: 420px;
+    min-height: 0;
+  }
+
+  .chart-frame {
+    height: 300px;
+  }
+
+  .prediction-chart-frame {
+    height: 300px;
   }
 }
